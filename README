@@ -1,0 +1,5 @@
+This is just an interesting and fun project to familiarize with telnet, sockets
+and overall C networking code.
+
+It's the idea of a simple networking text-based game over telnet to run on the
+urd machine raspberry pi.
