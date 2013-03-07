@@ -17,9 +17,48 @@ static const telnet_telopt_t opts[] = {
 	{ -1, 0, 0 }
 };
 
+struct telnet_data {
+	int sock;
+	telnet_t *telnet;
+};
+
 void handle_telnet(telnet_t *telnet, telnet_event_t *event, void *data)
 {
-	printf("We got dat telnet event yo\n");
+	switch(event->type) {
+		case TELNET_EV_DATA:
+			break;
+		case TELNET_EV_SEND:
+			break;
+		case TELNET_EV_IAC:
+			break;
+		case TELNET_EV_WILL:
+			break;
+		case TELNET_EV_WONT:
+			break;
+		case TELNET_EV_DO:
+			break;
+		case TELNET_EV_DONT:
+			break;
+		case TELNET_EV_SUBNEGOTIATION:
+			break;
+		case TELNET_EV_COMPRESS:
+			break;
+		case TELNET_EV_ZMP:
+			break;
+		case TELNET_EV_TTYPE:
+			break;
+		case TELNET_EV_ENVIRON:
+			break;
+		case TELNET_EV_MSSP:
+			break;
+		case TELNET_EV_WARNING:
+			break;
+		case TELNET_EV_ERROR:
+			break;
+		default:
+			fprintf(stderr,"Received unknown telnet event type. "
+					"Skipping...\n");
+	}
 }
 
 
@@ -31,18 +70,24 @@ void urd_main(int sockfd)
 	int ret;
 	int bufsize = 4096;
 	unsigned char buffer[bufsize];
-	telnet_t *telnet = telnet_init(opts, handle_telnet, 0, &sockfd);
+	struct telnet_data t_data;
+	t_data.sock = sockfd;
+	t_data.telnet = telnet_init(opts, handle_telnet, 0, &t_data);
+	if(t_data.telnet == NULL) {
+		fprintf(stderr,"Failed to init telnet for %d\n",t_data.sock);
+		goto breakout;
+	}
 	while(1) {
-		ret = recv(sockfd, buffer, bufsize, 0);
+		ret = recv(t_data.sock, buffer, bufsize, 0);
 		if (ret < 0) {
 			fprintf(stderr,"Error when receiving message\n");
 			perror("recv");
 		}
-		telnet_recv(telnet, buffer, ret);
-
+		telnet_recv(t_data.telnet, buffer, ret);
 		memset(buffer, 0, bufsize);
 	}
 
-	telnet_free(telnet);
+breakout:;
+	telnet_free(t_data.telnet);
 	close(sockfd);
 }
