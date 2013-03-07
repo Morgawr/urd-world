@@ -26,34 +26,49 @@ void handle_telnet(telnet_t *telnet, telnet_event_t *event, void *data)
 {
 	switch(event->type) {
 		case TELNET_EV_DATA:
+			printf("Got TELNET_EV_DATA\n");
 			break;
 		case TELNET_EV_SEND:
+			printf("Got TELNET_EV_SEND\n");
 			break;
 		case TELNET_EV_IAC:
+			printf("Got TELNET_EV_IAC\n");
 			break;
 		case TELNET_EV_WILL:
+			printf("Got TELNET_EV_WILL\n");
 			break;
 		case TELNET_EV_WONT:
+			printf("Got TELNET_EV_WONT\n");
 			break;
 		case TELNET_EV_DO:
+			printf("Got TELNET_EV_DO\n");
 			break;
 		case TELNET_EV_DONT:
+			printf("Got TELNET_EV_DONT\n");
 			break;
 		case TELNET_EV_SUBNEGOTIATION:
+			printf("Got TELNET_EV_SUBNEGOTIATION\n");
 			break;
 		case TELNET_EV_COMPRESS:
+			printf("Got TELNET_EV_COMPRESS\n");
 			break;
 		case TELNET_EV_ZMP:
+			printf("Got TELNET_EV_ZMP\n");
 			break;
 		case TELNET_EV_TTYPE:
+			printf("Got TELNET_EV_TTYPE\n");
 			break;
 		case TELNET_EV_ENVIRON:
+			printf("Got TELNET_EV_ENVIRON\n");
 			break;
 		case TELNET_EV_MSSP:
+			printf("Got TELNET_EV_MSSP\n");
 			break;
 		case TELNET_EV_WARNING:
+			printf("Got TELNET_EV_WARNING\n");
 			break;
 		case TELNET_EV_ERROR:
+			printf("Got TELNET_EV_ERROR\n");
 			break;
 		default:
 			fprintf(stderr,"Received unknown telnet event type. "
