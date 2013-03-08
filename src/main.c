@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <unistd.h>
+#include <ctype.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <arpa/inet.h>
@@ -66,11 +68,10 @@ int main(int argc, const char *argv[])
 		}
 		if(fork() == 0) {
 			urd_main(acc_fd);
-			goto actual_end;
+			break;
 		}
 	}
 	close(conn_fd);
 
-actual_end:;
 	return 0;
 }
