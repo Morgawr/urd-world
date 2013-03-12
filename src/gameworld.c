@@ -33,12 +33,6 @@ void handle_iac(unsigned char cmd, struct telnet_data *t_data)
 	/* This function was supposed to handle IAC commands. I don't really
 	 * want to bother with it at the moment so... nope
 	 */
-	//if(cmd == 244) { /* Exit code */
-	//	t_data->game.exiting = 1;
-	//}
-	//else {
-	//	fprintf(stderr,"IAC got %d, unhandled.\n",cmd);
-	//}
 }
 
 void process_input(const char *buffer, size_t size, struct telnet_data *t_data)
