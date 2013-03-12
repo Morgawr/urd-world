@@ -66,6 +66,9 @@ int main(int argc, const char *argv[])
 			fprintf(stderr, "Failed to accept connection\n");
 			perror("accept");
 		}
+		setsockopt(acc_fd, SOL_SOCKET, SO_KEEPALIVE,
+				(char *)&opt, sizeof(opt));
+		
 		if(fork() == 0) {
 			urd_main(acc_fd);
 			break;

@@ -133,6 +133,9 @@ void urd_main(int sockfd)
 			fprintf(stderr,"Error when receiving message\n");
 			perror("recv");
 		}
+		if (ret == 0) {
+			break;
+		}
 		telnet_recv(t_data.telnet, buffer, ret);
 		memset(buffer, 0, bufsize);
 		if(t_data.game.exiting) {
