@@ -3,6 +3,7 @@
 #include <sys/socket.h>
 #include <libtelnet.h>
 #include <urd_macros.h>
+#include <gamedata.h>
 #include <urd_interface.h>
 #include <string.h>
 #include <unistd.h>
@@ -18,34 +19,26 @@ static const telnet_telopt_t opts[] = {
 	{ -1, 0, 0 }
 };
 
-struct urd_status {
-	int exiting;
-};
-
-struct telnet_data {
-	int sock;
-	telnet_t *telnet;
-	struct urd_status game;
-};
-
-void handle_iac(unsigned char cmd, struct telnet_data *t_data)
+static void handle_iac(unsigned char cmd, struct telnet_data *t_data)
 {
 	/* This function was supposed to handle IAC commands. I don't really
 	 * want to bother with it at the moment so... nope
 	 */
 }
 
-void process_input(const char *buffer, size_t size, struct telnet_data *t_data)
+static void
+process_input(const char *buffer, size_t size, struct telnet_data *t_data)
 {
-	printf("#%d Conn - %s",t_data->sock, buffer);
+	DBG(("#%d Conn - %s",t_data->sock, buffer));
 }
 
-void urd_reply(const char *buffer, size_t size, struct telnet_data *t_data)
+static void
+urd_reply(const char *buffer, size_t size, struct telnet_data *t_data)
 {
 	/* I know I should deal with EV_SEND but I don't see any point */
 }
 
-void handle_telnet(telnet_t *telnet, telnet_event_t *event, void *data)
+static void handle_telnet(telnet_t *telnet, telnet_event_t *event, void *data)
 {
 	struct telnet_data *t_data = (struct telnet_data *)data;
 	switch(event->type) {
