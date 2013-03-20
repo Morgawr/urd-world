@@ -40,7 +40,8 @@ struct urd_party {
  */
 struct urd_status {
 	int exiting; /* When the client enters an exiting status */
-	char *command; /* Currently parsed command, player's input */
+	const char *command; /* Currently parsed command, player's input */
+	size_t command_size;
 	char output[MAX_REPLY]; /* Reply to send to player */
 	struct urd_party party; /* Party of fighters */
 };

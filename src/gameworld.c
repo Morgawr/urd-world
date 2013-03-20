@@ -9,13 +9,14 @@
 #include <unistd.h>
 
 static const telnet_telopt_t opts[] = {
-	{ TELNET_TELOPT_ECHO,      TELNET_WILL, TELNET_DO },
+	{ TELNET_TELOPT_ECHO,      TELNET_WONT, TELNET_DONT },
 	{ TELNET_TELOPT_TTYPE,     TELNET_WONT, TELNET_DONT },
 	{ TELNET_TELOPT_COMPRESS2, TELNET_WONT, TELNET_DONT },
 	{ TELNET_TELOPT_ZMP,       TELNET_WONT, TELNET_DONT },
 	{ TELNET_TELOPT_MSSP,      TELNET_WONT, TELNET_DONT },
 	{ TELNET_TELOPT_BINARY,    TELNET_WONT, TELNET_DONT },
 	{ TELNET_TELOPT_NAWS,      TELNET_WONT, TELNET_DONT },
+	{ TELNET_TELOPT_LINEMODE,  TELNET_WONT, TELNET_DONT },
 	{ -1, 0, 0 }
 };
 
@@ -26,16 +27,35 @@ static void handle_iac(unsigned char cmd, struct telnet_data *t_data)
 	 */
 }
 
+static void urd_update(struct urd_status *game)
+{
+	if(strcmp(game->command,"test") == 0)
+		memcpy(game->output,"reply",strlen("reply"));
+	else
+		memcpy(game->output,"false",strlen("false"));
+}
+
 static void
 process_input(const char *buffer, size_t size, struct telnet_data *t_data)
 {
-	DBG(("#%d Conn - %s",t_data->sock, buffer));
+	DBG(("#%d Conn - %s\n",t_data->sock, buffer));
+	if(buffer[0] == '\n' || buffer[0] == '\r')
+		return;
+	t_data->game.command = buffer;
+	t_data->game.command_size = size;
+	urd_update(&t_data->game); /* Update state of the game */
+	DBG(("#%d Reply - %s\n",t_data->sock, t_data->game.output));
+	telnet_printf(t_data->telnet, "%s\ncmd> ", t_data->game.output);
+
+	memset(t_data->game.output, 0, MAX_REPLY); /* clean extra stuff */
 }
 
 static void
 urd_reply(const char *buffer, size_t size, struct telnet_data *t_data)
 {
-	/* I know I should deal with EV_SEND but I don't see any point */
+	if(strlen(buffer) <= 0)
+		return;
+	send(t_data->sock, buffer, size, MSG_DONTWAIT);
 }
 
 static void handle_telnet(telnet_t *telnet, telnet_event_t *event, void *data)
