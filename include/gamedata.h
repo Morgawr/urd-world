@@ -1,5 +1,15 @@
+#ifndef __URD_GAMEDATA_H
+#define __URD_GAMEDATA_H
 
 #define MAX_REPLY 4096
+
+typedef enum {
+	URD_BEGIN, /* Beginning of the game, show intro message */
+	URD_CREATION, /* Party creation time */
+	URD_PARTY, /* Party exploring dungeon */
+	URD_BATTLE, /* Party in battle, turn based combat with enemy */
+	URD_INVENTORY /* Inside character's inventory, using items */
+} state_t;
 
 struct urd_item {
 	char *name;
@@ -33,6 +43,7 @@ struct urd_party {
 	struct urd_fighter *first; /* First member of the party, ordered by 
 				    * initiative 
 				    */
+	struct urd_fighter *current; /* Current character's turn */
 };
 
 /* Status of the game, it's pretty much the game world and everything related 
@@ -44,6 +55,7 @@ struct urd_status {
 	size_t command_size;
 	char output[MAX_REPLY]; /* Reply to send to player */
 	struct urd_party party; /* Party of fighters */
+	state_t game_state; /* Position of the game's state */
 };
 
 /* Low level data passed around by telnet */
@@ -52,3 +64,5 @@ struct telnet_data {
 	telnet_t *telnet;
 	struct urd_status game;
 };
+
+#endif 

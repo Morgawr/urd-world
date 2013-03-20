@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <libtelnet.h>
 #include <unistd.h>
 #include <ctype.h>
 #include <sys/types.h>

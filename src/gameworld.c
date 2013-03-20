@@ -29,10 +29,17 @@ static void handle_iac(unsigned char cmd, struct telnet_data *t_data)
 
 static void urd_update(struct urd_status *game)
 {
-	if(strcmp(game->command,"test") == 0)
-		memcpy(game->output,"reply",strlen("reply"));
-	else
-		memcpy(game->output,"false",strlen("false"));
+	if(game->game_state == URD_BEGIN && 
+		strcmp(game->command, "_-_start_-_") == 0)
+		urd_welcome(game);
+	/* Need to create a parsing function that turns the user's input into
+	 * a series of commands that can be easily parsed/
+	 */
+
+	/* A command is a sequence of words starting from the first which is a
+	 * verb. Depending on the verb, the command's structure will act on
+	 * characters, enemies or items.
+	 */
 }
 
 static void
@@ -43,9 +50,18 @@ process_input(const char *buffer, size_t size, struct telnet_data *t_data)
 		return;
 	t_data->game.command = buffer;
 	t_data->game.command_size = size;
+
 	urd_update(&t_data->game); /* Update state of the game */
+
 	DBG(("#%d Reply - %s\n",t_data->sock, t_data->game.output));
-	telnet_printf(t_data->telnet, "%s\ncmd> ", t_data->game.output);
+	telnet_printf(t_data->telnet, "%s\n", t_data->game.output);
+	switch(t_data->game.game_state) {
+		case URD_BEGIN:
+			telnet_printf(t_data->telnet, "Intro> ");
+			break;
+		default:
+			telnet_printf(t_data->telnet, "CMD> ");
+	}
 
 	memset(t_data->game.output, 0, MAX_REPLY); /* clean extra stuff */
 }
@@ -123,6 +139,14 @@ static void handle_telnet(telnet_t *telnet, telnet_event_t *event, void *data)
 	}
 }
 
+/* Initialize all the data for the beginning of the game. */
+static void init_game(struct telnet_data *t_data)
+{
+	t_data->game.game_state = URD_BEGIN;
+	t_data->game.party.first = t_data->game.party.current = NULL;
+	t_data->game.party.avg_level = 0;
+}
+
 
 /* This is the main entry point in our world. Nothing is shared with the 
  * actual connection server so we don't need to ever go back there.
@@ -140,6 +164,9 @@ void urd_main(int sockfd)
 		fprintf(stderr,"Failed to init telnet for %d\n",t_data.sock);
 		goto breakout;
 	}
+	init_game(&t_data);
+	strcpy(buffer,"_-_start_-_\0");
+	telnet_recv(t_data.telnet, buffer, strlen(buffer));
 	while(1) {
 		ret = recv(t_data.sock, buffer, bufsize, 0);
 		if (ret < 0) {

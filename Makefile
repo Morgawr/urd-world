@@ -3,10 +3,12 @@
 INCLUDE = -Iinclude
 
 SRC = src/main.c \
-      src/gameworld.c
+      src/gameworld.c \
+      src/actions.c
 
 OBJECTS = src/main.o \
-          src/gameworld.o
+          src/gameworld.o \
+          src/actions.o
 
 LIBS = 
 
