@@ -11,6 +11,32 @@ typedef enum {
 	URD_RANKINGS /* Showing ranking table */
 } state_t;
 
+/* All possible game states */
+struct urd_state {
+	state_t type;
+	union {
+		struct {
+			state_t type;
+		} begin;
+
+		struct {
+			state_t type;
+		} creation;
+
+		struct {
+			state_t type;
+		} dungeon;
+
+		struct {
+			state_t type;
+		} battle;
+
+		struct {
+			state_t type;
+		} rankings;
+	};
+};
+
 struct urd_item {
 	char *name;
 	int item_id; /* Item ID for stacking and lookup */
@@ -63,7 +89,7 @@ struct urd_status {
 	char output[MAX_REPLY]; /* Reply to send to player */
 	char old_output[MAX_REPLY]; /* Previous message */
 	struct urd_party party; /* Party of fighters */
-	state_t game_state; /* Position of the game's state */
+	struct urd_state state; /* Data of the game state */
 };
 
 /* Low level data passed around by telnet */

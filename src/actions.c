@@ -7,7 +7,7 @@
 #include <unistd.h>
 
 /* Print the welcome message to the output buffer */
-void urd_welcome(struct urd_status *game)
+static void urd_welcome(struct urd_status *game)
 {
 	char *message = 
 		"  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n"
@@ -28,4 +28,10 @@ void urd_welcome(struct urd_status *game)
 		"\n"
 		"Choose your poison, oh mighty player.";
 	sprintf(game->output, "%s", message);
+}
+
+
+void urd_update_begin(struct urd_status *game)
+{
+	urd_welcome(game);
 }
