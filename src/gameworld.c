@@ -70,14 +70,7 @@ process_input(const char *buffer, size_t size, struct telnet_data *t_data)
 
 	DBG(("#%d Reply - %s\n",t_data->sock, t_data->game.output));
 	telnet_printf(t_data->telnet, "%s\n", t_data->game.output);
-
-	//switch(t_data->game.game_state) {
-	//	case URD_BEGIN:
-	//		telnet_printf(t_data->telnet, "Intro> ");
-	//		break;
-	//	default:
-	//		telnet_printf(t_data->telnet, "CMD> ");
-	//}
+	telnet_printf(t_data->telnet, " > ");
 
 }
 
