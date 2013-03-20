@@ -6,9 +6,9 @@
 typedef enum {
 	URD_BEGIN, /* Beginning of the game, show intro message */
 	URD_CREATION, /* Party creation time */
-	URD_PARTY, /* Party exploring dungeon */
+	URD_DUNGEON, /* Party exploring dungeon */
 	URD_BATTLE, /* Party in battle, turn based combat with enemy */
-	URD_INVENTORY /* Inside character's inventory, using items */
+	URD_RANKINGS /* Showing ranking table */
 } state_t;
 
 struct urd_item {
@@ -31,8 +31,15 @@ struct urd_inventory {
 
 /* Single fighting character in a party */
 struct urd_fighter {
-	char *name;
+	char *first_name;
+	char *last_name;
+	char *nickname;
 	int level; /* Level of an individual fighter */
+	int str; /* Strength influences damage multiplier of weapons */
+	int dex; /* Dexterity influences initiative and accuracy */
+	int sta; /* Stamina influences maximum weight carry and defense */
+	int intl; /* Intelligence influences bonuses from items */
+	int luck; /* Luck influences critical hits and trap resistance */
 	struct urd_inventory items; /* Each fighter has its own inventory */
 	struct urd_fighter *next; /* Next fighter in the party */
 };
@@ -54,6 +61,7 @@ struct urd_status {
 	const char *command; /* Currently parsed command, player's input */
 	size_t command_size;
 	char output[MAX_REPLY]; /* Reply to send to player */
+	char old_output[MAX_REPLY]; /* Previous message */
 	struct urd_party party; /* Party of fighters */
 	state_t game_state; /* Position of the game's state */
 };

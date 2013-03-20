@@ -29,6 +29,20 @@ static void handle_iac(unsigned char cmd, struct telnet_data *t_data)
 
 static void urd_update(struct urd_status *game)
 {
+	switch(game->game_state) {
+		case URD_BEGIN:
+			break;
+		case URD_CREATION:
+			break;
+		case URD_DUNGEON:
+			break;
+		case URD_BATTLE:
+			break;
+		case URD_RANKINGS:
+			break;
+		default:
+			DBG(("Unhandled game state\n"));
+	}
 	if(game->game_state == URD_BEGIN && 
 		strcmp(game->command, "_-_start_-_") == 0)
 		urd_welcome(game);
@@ -50,6 +64,8 @@ process_input(const char *buffer, size_t size, struct telnet_data *t_data)
 		return;
 	t_data->game.command = buffer;
 	t_data->game.command_size = size;
+	strncpy(t_data->game.old_output, t_data->game.output, MAX_REPLY);
+	memset(t_data->game.output, 0, MAX_REPLY); /* clean extra stuff */
 
 	urd_update(&t_data->game); /* Update state of the game */
 
@@ -63,7 +79,6 @@ process_input(const char *buffer, size_t size, struct telnet_data *t_data)
 			telnet_printf(t_data->telnet, "CMD> ");
 	}
 
-	memset(t_data->game.output, 0, MAX_REPLY); /* clean extra stuff */
 }
 
 static void
