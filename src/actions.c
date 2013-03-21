@@ -122,11 +122,8 @@ void urd_update_begin(struct urd_status *game)
 						"What a crybaby... are you "
 						"really quitting?\n\n"
 						"Oh well, I can't force you "
-						"to stay.\n\n"
-						"\t. . .\n\n"
-						"Just kidding, quitting is "
-						"not implemented yet.\n\n"
-						"WE SAO NOW!\n");
+						"to stay.\n\n");
+				game->exiting = 1;
 				break;
 			default:
 				sprintf(game->output, "Command not "

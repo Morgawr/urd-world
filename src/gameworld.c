@@ -187,6 +187,9 @@ void urd_main(int sockfd)
 		telnet_recv(t_data.telnet, buffer, ret);
 		memset(buffer, 0, bufsize);
 		if(t_data.game.exiting) {
+			telnet_printf(t_data.telnet, 
+					"\n\nIt is now possible to turn off the"
+					" telnet client.\n");
 			break;
 		}
 	}
