@@ -11,29 +11,42 @@ typedef enum {
 	URD_RANKINGS /* Showing ranking table */
 } state_t;
 
+/* Base structure inherited by all other members of the state union */
+struct base_state {
+	state_t type;
+	char description[MAX_REPLY];
+};
+
 /* All possible game states */
 struct urd_state {
-	state_t type;
 	union {
+
+		struct base_state base;
+
 		struct {
 			state_t type;
+			char description[MAX_REPLY];
 			int intro_message;
 		} begin;
 
 		struct {
 			state_t type;
+			char description[MAX_REPLY];
 		} creation;
 
 		struct {
 			state_t type;
+			char description[MAX_REPLY];
 		} dungeon;
 
 		struct {
 			state_t type;
+			char description[MAX_REPLY];
 		} battle;
 
 		struct {
 			state_t type;
+			char description[MAX_REPLY];
 		} rankings;
 	};
 };
@@ -88,8 +101,6 @@ struct urd_status {
 	const char *command; /* Currently parsed command, player's input */
 	size_t command_size;
 	char output[MAX_REPLY]; /* Reply to send to player */
-	char fst_output[MAX_REPLY]; /* Previous message */
-	char snd_output[MAX_REPLY]; /* 2nd previous message */
 	struct urd_party party; /* Party of fighters */
 	struct urd_state state; /* Data of the game state */
 };

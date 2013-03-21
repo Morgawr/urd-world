@@ -7,13 +7,18 @@
 #include <string.h>
 #include <unistd.h>
 
+void print_description(struct urd_status *game)
+{
+	sprintf(game->output, "%s\n", game->state.base.description);
+}
+
 /* Print help message */
 static void print_help(struct urd_status *game)
 {
 	char *message = 
 		" These are the available commands for Urd world:\n"
 		"\thelp - Displays this message.\n"
-		"\trepeat - Re-prints the previous message.\n"
+		"\trepeat - Displays the current action's description.\n"
 		"\tnext - Continues with the game.\n";
 
 	sprintf(game->output, "%s", message);
@@ -21,7 +26,7 @@ static void print_help(struct urd_status *game)
 
 static void print_repeat(struct urd_status *game)
 {
-	sprintf(game->output, "%s", game->snd_output);
+	sprintf(game->output, "%s", game->state.base.description);
 }
 
 /* Function that checks for default commands like
@@ -78,13 +83,14 @@ static void print_welcome(struct urd_status *game)
 		"\t4) I'm too scared, get me out of here!\n"
 		"\n"
 		"Choose your poison, oh mighty player.";
-	sprintf(game->output, "%s", message);
+	sprintf(game->state.base.description, "%s", message);
 }
 
 void urd_update_begin(struct urd_status *game)
 {
 	if(!game->state.begin.intro_message) {
 		print_welcome(game);
+		print_description(game);
 		game->state.begin.intro_message = 1;
 		return;
 	}

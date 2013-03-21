@@ -29,7 +29,7 @@ static void handle_iac(unsigned char cmd, struct telnet_data *t_data)
 
 static void urd_update(struct urd_status *game)
 {
-	switch(game->state.type) {
+	switch(game->state.base.type) {
 		case URD_BEGIN:
 			urd_update_begin(game);
 			break;
@@ -63,8 +63,6 @@ process_input(const char *buffer, size_t size, struct telnet_data *t_data)
 		return;
 	t_data->game.command = buffer;
 	t_data->game.command_size = size;
-	strncpy(t_data->game.snd_output, t_data->game.fst_output, MAX_REPLY);
-	strncpy(t_data->game.fst_output, t_data->game.output, MAX_REPLY);
 	memset(t_data->game.output, 0, MAX_REPLY); /* clean extra stuff */
 
 	urd_update(&t_data->game); /* Update state of the game */
@@ -151,7 +149,7 @@ static void handle_telnet(telnet_t *telnet, telnet_event_t *event, void *data)
 /* Initialize all the data for the beginning of the game. */
 static void init_game(struct telnet_data *t_data)
 {
-	t_data->game.state.type = URD_BEGIN;
+	t_data->game.state.base.type = URD_BEGIN;
 	t_data->game.state.begin.intro_message = 0;
 	t_data->game.party.first = t_data->game.party.current = NULL;
 	t_data->game.party.avg_level = 0;
