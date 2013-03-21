@@ -88,7 +88,8 @@ struct urd_status {
 	const char *command; /* Currently parsed command, player's input */
 	size_t command_size;
 	char output[MAX_REPLY]; /* Reply to send to player */
-	char old_output[MAX_REPLY]; /* Previous message */
+	char fst_output[MAX_REPLY]; /* Previous message */
+	char snd_output[MAX_REPLY]; /* 2nd previous message */
 	struct urd_party party; /* Party of fighters */
 	struct urd_state state; /* Data of the game state */
 };

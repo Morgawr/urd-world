@@ -63,7 +63,8 @@ process_input(const char *buffer, size_t size, struct telnet_data *t_data)
 		return;
 	t_data->game.command = buffer;
 	t_data->game.command_size = size;
-	strncpy(t_data->game.old_output, t_data->game.output, MAX_REPLY);
+	strncpy(t_data->game.snd_output, t_data->game.fst_output, MAX_REPLY);
+	strncpy(t_data->game.fst_output, t_data->game.output, MAX_REPLY);
 	memset(t_data->game.output, 0, MAX_REPLY); /* clean extra stuff */
 
 	urd_update(&t_data->game); /* Update state of the game */
