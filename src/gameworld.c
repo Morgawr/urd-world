@@ -40,6 +40,7 @@ static void urd_update(struct urd_status *game)
 		case URD_BATTLE:
 			break;
 		case URD_RANKINGS:
+			urd_update_rankings(game);
 			break;
 		default:
 			DBG(("Unhandled game state\n"));
