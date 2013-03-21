@@ -151,6 +151,7 @@ static void handle_telnet(telnet_t *telnet, telnet_event_t *event, void *data)
 static void init_game(struct telnet_data *t_data)
 {
 	t_data->game.state.type = URD_BEGIN;
+	t_data->game.state.begin.intro_message = 0;
 	t_data->game.party.first = t_data->game.party.current = NULL;
 	t_data->game.party.avg_level = 0;
 }
@@ -173,7 +174,7 @@ void urd_main(int sockfd)
 		goto breakout;
 	}
 	init_game(&t_data);
-	strcpy(buffer,"_-_start_-_\0");
+	strncpy(buffer,".",MAX_REPLY);
 	telnet_recv(t_data.telnet, buffer, strlen(buffer));
 	while(1) {
 		ret = recv(t_data.sock, buffer, bufsize, 0);

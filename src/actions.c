@@ -33,5 +33,8 @@ static void urd_welcome(struct urd_status *game)
 
 void urd_update_begin(struct urd_status *game)
 {
-	urd_welcome(game);
+	if(!game->state.begin.intro_message) {
+		urd_welcome(game);
+		game->state.begin.intro_message = 1;
+	}
 }

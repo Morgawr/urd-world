@@ -17,6 +17,7 @@ struct urd_state {
 	union {
 		struct {
 			state_t type;
+			int intro_message;
 		} begin;
 
 		struct {
