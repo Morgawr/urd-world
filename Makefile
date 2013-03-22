@@ -20,7 +20,7 @@ TARGET = urd-world
 
 CC = gcc
 CPPFLAGS = 
-CFLAGS = -std=c99 -DDEBUG -g
+CFLAGS = -std=c99 
 LDFLAGS = -ltelnet
 
 .PHONY: default all clean

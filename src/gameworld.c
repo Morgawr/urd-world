@@ -150,7 +150,7 @@ static void handle_telnet(telnet_t *telnet, telnet_event_t *event, void *data)
 /* Initialize all the data for the beginning of the game. */
 static void init_game(struct telnet_data *t_data)
 {
-	t_data->game.state.base.type = URD_BEGIN;
+	generate_begin(&(t_data->game));
 	t_data->game.state.begin.intro_message = 0;
 	t_data->game.party.first = t_data->game.party.current = NULL;
 	t_data->game.party.avg_level = 0;

@@ -7,6 +7,17 @@
 #include <string.h>
 #include <unistd.h>
 
+static void print_welcome(struct urd_status *game);
+
+void generate_begin(struct urd_status *game)
+{
+	memset(&(game->state), 0, sizeof(game->state));
+	game->state.base.type = URD_BEGIN;
+	game->state.begin.intro_message = 1;
+	print_welcome(game);
+	print_description(game);
+}
+
 /* Print the welcome message to the output buffer */
 static void print_welcome(struct urd_status *game)
 {
@@ -34,9 +45,8 @@ static void print_welcome(struct urd_status *game)
 void urd_update_begin(struct urd_status *game)
 {
 	if(!game->state.begin.intro_message) {
-		print_welcome(game);
-		print_description(game);
 		game->state.begin.intro_message = 1;
+		print_description(game);
 		return;
 	}
 
@@ -59,8 +69,7 @@ void urd_update_begin(struct urd_status *game)
 						"Not implemented yet.\n");
 				break;
 			case '3':
-				sprintf(game->output,
-						"Not implemented yet.\n");
+				generate_rankings(game);
 				break;
 			case '4':
 				sprintf(game->output, 
