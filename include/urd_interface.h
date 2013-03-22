@@ -6,6 +6,13 @@ void urd_main(int sockfd);
 int parse_defaults(struct urd_status *game);
 void print_description(struct urd_status *game);
 
+/* Command stack operations */
+struct cmd_stack* init_cmd_stack();
+void push_cmd_stack(struct cmd_stack *s, const char *msg, size_t length);
+char* pop_cmd_stack(struct cmd_stack *s);
+char* peek_cmd_stack(struct cmd_stack *s);
+void free_cmd_stack(struct cmd_stack *s);
+
 void generate_begin(struct urd_status *game);
 void urd_update_begin(struct urd_status *game);
 

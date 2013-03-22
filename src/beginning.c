@@ -35,8 +35,9 @@ static void print_welcome(struct urd_status *game)
 		"\n"
 		"\t1) Start a new adventure\n"
 		"\t2) Load previous adventure\n"
-		"\t3) Approach the board of rankings\n"
-		"\t4) I'm too scared, get me out of here!\n"
+		"\t3) Read the tutorial\n"
+		"\t4) Approach the board of rankings\n"
+		"\t5) I'm too scared, get me out of here!\n"
 		"\n"
 		"Choose your poison, oh mighty player.";
 	sprintf(game->state.base.description, "%s", message);
@@ -56,32 +57,36 @@ void urd_update_begin(struct urd_status *game)
 		return;
 
 	if(res == 2) {
-		sprintf(game->output, "%s", "We received next!\n");
+		sprintf(game->output, "We received next!");
 	}
 	else {
 		switch(game->command[0]) {
 			case '1':
 				sprintf(game->output,
-						"Not implemented yet.\n");
+						"Not implemented yet.");
 				break;
 			case '2':
 				sprintf(game->output,
-						"Not implemented yet.\n");
+						"Not implemented yet.");
 				break;
 			case '3':
-				generate_rankings(game);
+				sprintf(game->output,
+						"Tutorial doesn't exist yet.");
 				break;
 			case '4':
+				generate_rankings(game);
+				break;
+			case '5':
 				sprintf(game->output, 
 						"What a crybaby... are you "
 						"really quitting?\n\n"
 						"Oh well, I can't force you "
-						"to stay.\n\n");
+						"to stay.\n");
 				game->exiting = 1;
 				break;
 			default:
 				sprintf(game->output, "Command not "
-						"recognized\n");
+						"recognized");
 		}
 	}
 

@@ -9,7 +9,7 @@
 
 void print_description(struct urd_status *game)
 {
-	sprintf(game->output, "%s\n", game->state.base.description);
+	sprintf(game->output, "%s", game->state.base.description);
 }
 
 /* Print help message */
@@ -19,7 +19,7 @@ static void print_help(struct urd_status *game)
 		" These are the available commands for Urd world:\n"
 		"\thelp - Displays this message.\n"
 		"\trepeat - Displays the current action's description.\n"
-		"\tnext - Continues with the game.\n";
+		"\tnext - Continues with the game.";
 
 	sprintf(game->output, "%s", message);
 }

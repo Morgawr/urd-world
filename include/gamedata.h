@@ -3,6 +3,33 @@
 
 #define MAX_REPLY 4096
 
+/* Single command instance in stack of commands */
+struct cmd_elem {
+	char *msg;
+	struct cmd_elem *next; /* Next element in stack */
+};
+
+/* Traditionally speaking, this stack grows from bottom to top, words are
+ * inserted in the opposite way of a traditional sentence, the last word
+ * inserted is the actual command. 
+ * The bottom is the last word, the top is the first word inserted on the stack
+ * aka the last word of the sentence.
+ * EXAMPLE:
+ * "Attack monster with sword" 
+ * TOP    _ SWORD
+ *        _ MONSTER
+ * BOTTOM _ ATTACK
+ */
+
+/* Stack of commands */
+struct cmd_stack {
+	int args; /* Number of words in command */
+	struct cmd_elem *bottom; /* Bottom of the stack */
+	struct cmd_elem *top; /* Top of the stack */
+};
+
+
+
 typedef enum {
 	URD_BEGIN, /* Beginning of the game, show intro message */
 	URD_CREATION, /* Party creation time */
@@ -15,6 +42,7 @@ typedef enum {
 struct base_state {
 	state_t type;
 	char description[MAX_REPLY];
+	struct cmd_stack *cmd;
 };
 
 /* All possible game states */
@@ -26,27 +54,32 @@ struct urd_state {
 		struct {
 			state_t type;
 			char description[MAX_REPLY];
+			struct cmd_stack *cmd;
 			int intro_message;
 		} begin;
 
 		struct {
 			state_t type;
 			char description[MAX_REPLY];
+			struct cmd_stack *cmd;
 		} creation;
 
 		struct {
 			state_t type;
 			char description[MAX_REPLY];
+			struct cmd_stack *cmd;
 		} dungeon;
 
 		struct {
 			state_t type;
 			char description[MAX_REPLY];
+			struct cmd_stack *cmd;
 		} battle;
 
 		struct {
 			state_t type;
 			char description[MAX_REPLY];
+			struct cmd_stack *cmd;
 		} rankings;
 	};
 };
