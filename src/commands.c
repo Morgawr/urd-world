@@ -13,6 +13,7 @@ struct cmd_stack* init_cmd_stack()
 	s->bottom = NULL;
 	s->top = NULL;
 	s->args = 0;
+	return s;
 }
 
 /* msg will get copied over */

@@ -31,7 +31,7 @@ int main(int argc, const char *argv[])
 	int conn_fd = 0;
 	int ret;
 	struct sockaddr_in addr;
-	int addrlen;
+	unsigned int addrlen;
 	int acc_fd = 0;
 	int opt = 1;
 

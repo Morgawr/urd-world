@@ -164,7 +164,7 @@ void urd_main(int sockfd)
 {
 	int ret;
 	int bufsize = 4096;
-	unsigned char buffer[bufsize];
+	char buffer[bufsize];
 	struct telnet_data t_data;
 	t_data.sock = sockfd;
 	t_data.telnet = telnet_init(opts, handle_telnet, 0, &t_data);

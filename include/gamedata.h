@@ -28,8 +28,6 @@ struct cmd_stack {
 	struct cmd_elem *top; /* Top of the stack */
 };
 
-
-
 typedef enum {
 	URD_BEGIN, /* Beginning of the game, show intro message */
 	URD_CREATION, /* Party creation time */
