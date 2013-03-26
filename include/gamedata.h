@@ -131,6 +131,7 @@ struct urd_status {
 	int exiting; /* When the client enters an exiting status */
 	const char *command; /* Currently parsed command, player's input */
 	size_t command_size;
+	struct cmd_stack *action_stack; /* The command post-parsing in stack */
 	char output[MAX_REPLY]; /* Reply to send to player */
 	struct urd_party party; /* Party of fighters */
 	struct urd_state state; /* Data of the game state */

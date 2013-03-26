@@ -12,6 +12,7 @@ void push_cmd_stack(struct cmd_stack *s, const char *msg, size_t length);
 char* pop_cmd_stack(struct cmd_stack *s);
 char* peek_cmd_stack(struct cmd_stack *s);
 void free_cmd_stack(struct cmd_stack *s);
+struct cmd_stack* obtain_command(const char *cmd, size_t length);
 
 void generate_begin(struct urd_status *game);
 void urd_update_begin(struct urd_status *game);

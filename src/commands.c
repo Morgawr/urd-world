@@ -72,3 +72,37 @@ void free_cmd_stack(struct cmd_stack *s)
 	}
 	free(s);
 }
+
+static int is_ignored_word(const char *word, size_t length)
+{
+	return 0;
+}
+
+
+struct cmd_stack* obtain_command(const char *cmd, size_t length)
+{
+	struct cmd_stack *s = init_cmd_stack();
+	
+	const char *ptr = cmd;
+	unsigned int counter = 0;
+	while(ptr != '\0' && counter < length) {
+		counter++;
+		ptr++;
+	}
+	
+	if(ptr[0] != '\0')
+		fprintf(stderr, "WARNING - possible buffer overflow attempt\n");
+
+	unsigned int idx = counter;
+	for(int i = counter; i >= 0; i--, ptr--) {
+		if(ptr[0] == ' ' || ptr == cmd) {
+			if(!is_ignored_word(ptr, idx - i)) {
+				push_cmd_stack(s, ptr, idx - i);
+			}
+			idx = i;
+		}
+	}
+
+	return s;
+}
+
