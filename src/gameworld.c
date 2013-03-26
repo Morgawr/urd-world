@@ -7,6 +7,7 @@
 #include <urd_interface.h>
 #include <string.h>
 #include <unistd.h>
+#include <stdlib.h>
 
 static const telnet_telopt_t opts[] = {
 	{ TELNET_TELOPT_ECHO,      TELNET_WONT, TELNET_DONT },
@@ -169,7 +170,7 @@ static void init_game(struct telnet_data *t_data)
 /* This is the main entry point in our world. Nothing is shared with the 
  * actual connection server so we don't need to ever go back there.
  */
-void urd_main(int sockfd) 
+_Noreturn void urd_main(int sockfd) 
 {
 	int ret;
 	int bufsize = 4096;
@@ -209,4 +210,5 @@ void urd_main(int sockfd)
 breakout:;
 	telnet_free(t_data.telnet);
 	close(sockfd);
+	exit(0);
 }

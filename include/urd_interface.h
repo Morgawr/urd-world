@@ -2,7 +2,7 @@
 #define __URD_INTERFACE_H
 #include <gamedata.h>
 
-void urd_main(int sockfd);
+_Noreturn void urd_main(int sockfd);
 int parse_defaults(struct urd_status *game);
 void print_description(struct urd_status *game);
 

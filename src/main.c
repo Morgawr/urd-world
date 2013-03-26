@@ -71,6 +71,7 @@ int main(int argc, const char *argv[])
 				(char *)&opt, sizeof(opt));
 		
 		if(fork() == 0) {
+			close(conn_fd);
 			urd_main(acc_fd);
 			break;
 		}
