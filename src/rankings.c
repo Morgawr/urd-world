@@ -10,8 +10,8 @@
 void generate_rankings(struct urd_status *game)
 {
 	memset(&(game->state), 0, sizeof(game->state));
-	game->state.base.type = URD_RANKINGS;
-	sprintf(game->state.base.description, 
+	game->state.type = URD_RANKINGS;
+	sprintf(game->state.description, 
 			"You approach the board of rankings. There seems to\n"
 			"be a sign written on top. Here's what it says:\n"
 			"\t\"The dungeon is not yet open to the public,\n"

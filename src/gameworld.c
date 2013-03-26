@@ -31,12 +31,12 @@ static void handle_iac(unsigned char cmd, struct telnet_data *t_data)
 static void urd_update(struct urd_status *game)
 {
 
-	if(game->action_stack != NULL)
+	if(game->state.cmd != NULL)
 		fprintf(stderr, "WARNING - possible memory corruption\n");
 
-	game->action_stack = obtain_command(game->command, game->command_size);
+	game->state.cmd = obtain_command(game->command, game->command_size);
 
-	switch(game->state.base.type) {
+	switch(game->state.type) {
 		case URD_BEGIN:
 			urd_update_begin(game);
 			break;
@@ -53,8 +53,8 @@ static void urd_update(struct urd_status *game)
 			DBG(("Unhandled game state\n"));
 	}
 
-	free_cmd_stack(game->action_stack);
-	game->action_stack = NULL;
+	free_cmd_stack(game->state.cmd);
+	game->state.cmd = NULL;
 
 	/* Need to create a parsing function that turns the user's input into
 	 * a series of commands that can be easily parsed

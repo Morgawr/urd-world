@@ -12,7 +12,7 @@ static void print_welcome(struct urd_status *game);
 void generate_begin(struct urd_status *game)
 {
 	memset(&(game->state), 0, sizeof(game->state));
-	game->state.base.type = URD_BEGIN;
+	game->state.type = URD_BEGIN;
 	game->state.begin.intro_message = 1;
 	print_welcome(game);
 	print_description(game);
@@ -40,7 +40,7 @@ static void print_welcome(struct urd_status *game)
 		"\t5) I'm too scared, get me out of here!\n"
 		"\n"
 		"Choose your poison, oh mighty player.";
-	sprintf(game->state.base.description, "%s", message);
+	sprintf(game->state.description, "%s", message);
 }
 
 void urd_update_begin(struct urd_status *game)

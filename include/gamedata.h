@@ -36,48 +36,32 @@ typedef enum {
 	URD_RANKINGS /* Showing ranking table */
 } state_t;
 
-/* Base structure inherited by all other members of the state union */
-struct base_state {
+/* All possible game states */
+struct urd_state {
+
 	state_t type;
 	char description[MAX_REPLY];
 	struct cmd_stack *cmd;
-};
 
-/* All possible game states */
-struct urd_state {
 	union {
-
-		struct base_state base;
-
 		struct {
-			state_t type;
-			char description[MAX_REPLY];
-			struct cmd_stack *cmd;
 			int intro_message;
 		} begin;
 
 		struct {
-			state_t type;
-			char description[MAX_REPLY];
-			struct cmd_stack *cmd;
+
 		} creation;
 
 		struct {
-			state_t type;
-			char description[MAX_REPLY];
-			struct cmd_stack *cmd;
+
 		} dungeon;
 
 		struct {
-			state_t type;
-			char description[MAX_REPLY];
-			struct cmd_stack *cmd;
+
 		} battle;
 
 		struct {
-			state_t type;
-			char description[MAX_REPLY];
-			struct cmd_stack *cmd;
+
 		} rankings;
 	};
 };
@@ -131,7 +115,6 @@ struct urd_status {
 	int exiting; /* When the client enters an exiting status */
 	const char *command; /* Currently parsed command, player's input */
 	size_t command_size;
-	struct cmd_stack *action_stack; /* The command post-parsing in stack */
 	char output[MAX_REPLY]; /* Reply to send to player */
 	struct urd_party party; /* Party of fighters */
 	struct urd_state state; /* Data of the game state */

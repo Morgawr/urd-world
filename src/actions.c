@@ -9,7 +9,7 @@
 
 void print_description(struct urd_status *game)
 {
-	sprintf(game->output, "%s", game->state.base.description);
+	sprintf(game->output, "%s", game->state.description);
 }
 
 /* Print help message */
@@ -26,7 +26,7 @@ static void print_help(struct urd_status *game)
 
 static void print_repeat(struct urd_status *game)
 {
-	sprintf(game->output, "%s", game->state.base.description);
+	sprintf(game->output, "%s", game->state.description);
 }
 
 /* Function that checks for default commands like
