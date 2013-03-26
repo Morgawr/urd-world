@@ -1,5 +1,6 @@
 #ifndef __URD_GAMEDATA_H
 #define __URD_GAMEDATA_H
+#include <sqlite3.h>
 
 #define MAX_REPLY 4096
 
@@ -26,6 +27,18 @@ struct cmd_stack {
 	int args; /* Number of words in command */
 	struct cmd_elem *bottom; /* Bottom of the stack */
 	struct cmd_elem *top; /* Top of the stack */
+};
+
+/* Word to ignore in stack of commands */
+struct ignored_word {
+	char *word;
+	struct ignored_word *next;
+};
+
+/* List of words starting from the first to ignore in stack of commands */
+struct ignored_words {
+	int count;
+	struct ignored_word *first;
 };
 
 typedef enum {
@@ -118,6 +131,8 @@ struct urd_status {
 	char output[MAX_REPLY]; /* Reply to send to player */
 	struct urd_party party; /* Party of fighters */
 	struct urd_state state; /* Data of the game state */
+	sqlite3 *word_db; /* Words-related database */
+	struct ignored_words *ignored_words;
 };
 
 /* Low level data passed around by telnet */

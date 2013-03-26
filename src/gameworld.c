@@ -2,6 +2,7 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <libtelnet.h>
+#include <sqlite3.h>
 #include <urd_macros.h>
 #include <gamedata.h>
 #include <urd_interface.h>
@@ -34,7 +35,8 @@ static void urd_update(struct urd_status *game)
 	if(game->state.cmd != NULL)
 		fprintf(stderr, "WARNING - possible memory corruption\n");
 
-	game->state.cmd = obtain_command(game->command, game->command_size);
+	game->state.cmd = obtain_command(game->command, game->command_size,
+					game->ignored_words);
 
 	switch(game->state.type) {
 		case URD_BEGIN:
@@ -158,12 +160,23 @@ static void handle_telnet(telnet_t *telnet, telnet_event_t *event, void *data)
 }
 
 /* Initialize all the data for the beginning of the game. */
-static void init_game(struct telnet_data *t_data)
+static int init_game(struct telnet_data *t_data)
 {
 	generate_begin(&(t_data->game));
 	t_data->game.state.begin.intro_message = 0;
 	t_data->game.party.first = t_data->game.party.current = NULL;
 	t_data->game.party.avg_level = 0;
+
+	/* Initialize sqlite instances */
+	int err = sqlite3_open("data/words.db", &t_data->game.word_db);
+	if(err) {
+		fprintf(stderr, "Error initializing the word database\n");
+		return -1;
+	}
+
+	t_data->game.ignored_words = init_ignored_words(t_data->game.word_db);
+	t_data->game.state.cmd = NULL;
+	return 0;
 }
 
 
@@ -172,6 +185,7 @@ static void init_game(struct telnet_data *t_data)
  */
 _Noreturn void urd_main(int sockfd) 
 {
+	printf("Client #%d conneted.\n", sockfd);
 	int ret;
 	int bufsize = 4096;
 	char buffer[bufsize];
@@ -183,7 +197,9 @@ _Noreturn void urd_main(int sockfd)
 		fprintf(stderr,"Failed to init telnet for %d\n",t_data.sock);
 		goto breakout;
 	}
-	init_game(&t_data);
+	ret = init_game(&t_data);
+	if(ret < 0)
+		goto breakout;
 	strncpy(buffer,".",MAX_REPLY);
 	telnet_recv(t_data.telnet, buffer, strlen(buffer));
 	while(1) {
@@ -205,9 +221,10 @@ _Noreturn void urd_main(int sockfd)
 		}
 	}
 
-	printf("Connection closed for %d\n",t_data.sock);
 
 breakout:;
+	printf("Connection closed for %d\n",t_data.sock);
+	sqlite3_close(t_data.game.word_db);
 	telnet_free(t_data.telnet);
 	close(sockfd);
 	exit(0);

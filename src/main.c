@@ -6,6 +6,7 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <urd_macros.h>
+#include <sqlite3.h>
 #include <urd_interface.h>
 #include <string.h>
 
