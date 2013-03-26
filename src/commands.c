@@ -5,6 +5,7 @@
 #include <urd_interface.h>
 #include <string.h>
 #include <stdlib.h>
+#include <ctype.h>
 
 
 struct cmd_stack* init_cmd_stack()
@@ -75,6 +76,18 @@ void free_cmd_stack(struct cmd_stack *s)
 
 static int is_ignored_word(const char *word, size_t length)
 {
+	/* First and foremost, check for string of only spaces */
+	int onlyspaces = 1;
+	for(size_t i = 0; i < length; i++) {
+		if(!isspace(word[i])) {
+			onlyspaces = 0;
+			break;
+		}
+	}
+
+	if(onlyspaces)
+		return 1;
+
 	return 0;
 }
 
@@ -102,6 +115,7 @@ struct cmd_stack* obtain_command(const char *cmd, size_t length)
 			idx = i;
 		}
 	}
+	printf("%d\n",s->args);
 
 	return s;
 }

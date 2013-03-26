@@ -6,12 +6,12 @@
 #include <urd_interface.h>
 #include <string.h>
 #include <unistd.h>
+#include <stdlib.h>
 
 static void print_welcome(struct urd_status *game);
 
 void generate_begin(struct urd_status *game)
 {
-	memset(&(game->state), 0, sizeof(game->state));
 	game->state.type = URD_BEGIN;
 	game->state.begin.intro_message = 1;
 	print_welcome(game);
@@ -60,7 +60,8 @@ void urd_update_begin(struct urd_status *game)
 		sprintf(game->output, "We received next!");
 	}
 	else {
-		switch(game->command[0]) {
+		char *command = peek_cmd_stack(game->state.cmd);
+		switch(command[0]) {
 			case '1':
 				sprintf(game->output,
 						"Not implemented yet.");
@@ -88,6 +89,7 @@ void urd_update_begin(struct urd_status *game)
 				sprintf(game->output, "Command not "
 						"recognized");
 		}
+		free(command);
 	}
 
 }

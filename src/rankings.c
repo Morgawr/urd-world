@@ -9,7 +9,6 @@
 
 void generate_rankings(struct urd_status *game)
 {
-	memset(&(game->state), 0, sizeof(game->state));
 	game->state.type = URD_RANKINGS;
 	sprintf(game->state.description, 
 			"You approach the board of rankings. There seems to\n"
