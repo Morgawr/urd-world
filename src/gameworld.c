@@ -9,6 +9,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include <ctype.h>
 
 static const telnet_telopt_t opts[] = {
 	{ TELNET_TELOPT_ECHO,      TELNET_WONT, TELNET_DONT },
@@ -74,11 +75,20 @@ process_input(const char *buffer, size_t size, struct telnet_data *t_data)
 	DBG(("#%d Conn - %s\n",t_data->sock, buffer));
 	if(buffer[0] == '\n' || buffer[0] == '\r')
 		return;
-	t_data->game.command = buffer;
+	t_data->game.command = malloc(size+1);
+	strncpy(t_data->game.command, buffer, size);
+	t_data->game.command[size] = '\0';
+
+	for(size_t i = 0; i < size; i++) {
+		t_data->game.command[i] = tolower(t_data->game.command[i]);
+	}
+
 	t_data->game.command_size = size;
 	memset(t_data->game.output, 0, MAX_REPLY); /* clean extra stuff */
 
 	urd_update(&t_data->game); /* Update state of the game */
+
+	free(t_data->game.command);
 
 	DBG(("#%d Reply - %s\n",t_data->sock, t_data->game.output));
 	telnet_printf(t_data->telnet, "%s\n", t_data->game.output);

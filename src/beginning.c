@@ -92,4 +92,25 @@ void urd_update_begin(struct urd_status *game)
 		free(command);
 	}
 
+
+	char *command = pop_cmd_stack(game->state.cmd);
+
+	/* simple testing facility */
+	if(strncmp(command,"echo",strlen("echo")) == 0) {  
+		game->output[0] = '\0';
+		int args = game->state.cmd->args;
+		strcpy(game->output, "You shout \"");
+		for(int i = 0; i < args; i++) {
+			char *word = pop_cmd_stack(game->state.cmd);
+			strncat(game->output, word, strlen(word)+1);
+			strncat(game->output, " ", 2);
+			free(word);
+		}
+		strcat(game->output,
+			"\" in the empty and dark cave of the dungeon.\n");
+		strcat(game->output,"Yet nobody hears you. You're all alone.");
+	}
+
+	free(command);
+
 }
